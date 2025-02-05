@@ -5,7 +5,9 @@ write a Python program that finds all unique --prime numbers-- hidden within a
 given --binary string--, and --less-- than a given integer number --N--.
 
 """
+"------------------------------------------------------------------------------------"
 """
+№1
 Idea:
 1.Check if valid (contains only 0 or 1)
 
@@ -15,7 +17,7 @@ Idea:
 3.turn each combo to decimal and check if it prime and <n
 (need a set to store results)
 
-"""
+
 #Check if a number is prime
 #is 1 and 0 prime?
 def is_prime(n):
@@ -34,7 +36,7 @@ def find_primes(binary_str, n):
         return []
 
     # find all substrings until  len(bin(n))
-    max_length = len(bin(n)) - 2  # limit for search
+    max_length = len(bin(n)) - 2  # limit for search --might need to be change to  root(n)+1?
     substring = set()
     for length in range(1, max_length + 1):
         for i in range(len(binary_str) - length + 1):
@@ -63,7 +65,6 @@ def format_output(primes):
         return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
 
 
-"""example"""
 # example
 binary_str = "101011"
 N = 99
@@ -79,6 +80,92 @@ binary_str = "COMP"
 N = 4
 primes = find_primes(binary_str, N)
 print(format_output(primes))
+"""
+
+"------------------------------------------------------------------------------------"
+
+
+"""
+№2
+Idea: 
+1.Search all primes number <= N
+2.Find them (if exist) in lst
+"""
+#check primes
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+#find all prime numbers <=n
+def generate_primes(n):
+    primes = []
+    for i in range(2, n + 1):
+        if is_prime(i):
+            binary_ver = bin(i)[2:]
+            primes.append(binary_ver)
+    return primes
+
+
+
+#check if prime number <=n in our binary lst
+def find_matching_primes(binary_str, binary_primes):
+    answer = []
+    for binary_prime in binary_primes:
+        if binary_prime in binary_str:
+            answer.append(int(binary_prime, 2))
+    return answer
+
+
+def format_output(binary_str, n):
+    if not all(c in '01' for c in binary_str):
+        return "0: Invalid binary string"
+
+    primes = generate_primes(n)
+    matching_primes = find_matching_primes(binary_str, primes)
+
+    if not matching_primes:
+        return "0: No prime numbers found"
+
+    total = len(matching_primes)
+    if total < 6:
+        return f"{total}: {', '.join(map(str, matching_primes))}"
+    else:
+        first_three = matching_primes[:3]
+        last_three = matching_primes[-3:]
+        return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
+
+# Example usage
+binary_str = "101011"
+n = 100
+print(format_output(binary_str, n))
+
+"--------------------------------------------"
+
+"""
+№3
+idea:
+use dictonary --> find each number in binary string, and store it in dictonary
+find number in binary string
+"10110"
+len 1 --> [1],[0]
+len 2 --> [10], [01],[11],[10]
+.....
+
+
+                         **is value new(not in dictionary) ** 
+Yes                                       | No
+1.add to dictionary + change to base 10   |skip
+2.Check is_prime                          |
+Yes                 | No                  |
+Add to result set   |skip/next number     |
+3.check if it prime and <n                |
+
+
+""""
 
 
 
