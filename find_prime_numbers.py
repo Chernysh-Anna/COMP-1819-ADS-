@@ -90,7 +90,7 @@ print(format_output(primes))
 Idea: 
 1.Search all primes number <= N
 2.Find them (if exist) in lst
-"""
+
 #check primes
 def is_prime(n):
     if n < 2:
@@ -142,6 +142,7 @@ def format_output(binary_str, n):
 binary_str = "101011"
 n = 100
 print(format_output(binary_str, n))
+"""
 
 "--------------------------------------------"
 
@@ -165,11 +166,58 @@ Add to result set   |skip/next number     |
 3.check if it prime and <n                |
 
 
-""""
+"""
+
+#check primes
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+#main
+def find_primes_dp(binary_str, n):
+    if not all(c in '01' for c in binary_str):
+        return "0: Invalid binary string"
+
+    substr_map = {}  # dictionary
+    primes = set()
+
+    for i in range(len(binary_str)):
+        for j in range(i + 1, len(binary_str) + 1):
+            sub = binary_str[i:j]
+            if sub not in substr_map:
+                substr_map[sub] = int(sub, 2)
+
+            decimal_value = substr_map[sub]
+            if decimal_value < n and is_prime(decimal_value):
+                primes.add(decimal_value)
+
+    return primes
+
+def format_output(binary_str, n):
+    if not all(c in '01' for c in binary_str):
+        return "0: Invalid binary string"
+
+    answer = find_primes_dp(binary_str, n)
+    if not answer:
+        return "0: No prime numbers found"
+
+    total = len(answer)
+    if total < 6:
+        return f"{total}: {', '.join(map(str, answer))}"
+    else:
+        first_three = answers[:3]
+        last_three = answer[-3:]
+        return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
 
 
-
-
+# Example usage
+binary_str = "101011"
+n = 100
+print(format_output(binary_str, n))
 
 
 
