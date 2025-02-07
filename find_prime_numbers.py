@@ -17,10 +17,17 @@ Idea:
 3.turn each combo to decimal and check if it prime and <n
 (need a set to store results)
 """
+"""
+info:
+ Doesn't work (only for short one)
+ It find all primes untill n and dont refer to input bn_string(i dont know why....)
+ 
+"""
 
 #Check if a number is prime
 #is 1 and 0 prime?
 def is_prime(n):
+    """Check if a number is prime."""
     if n < 2:
         return False
     for i in range(2, int(n ** 0.5) + 1):
@@ -28,64 +35,56 @@ def is_prime(n):
             return False
     return True
 
-#main
-#Find all unique prime numbers from substrings of the binary str that are less than N
+
 def find_primes(binary_str, n):
-    #check
+    """Find unique prime numbers from binary substrings that are less than N."""
     if not all(c in '01' for c in binary_str):
         return []
 
-    # find all substrings until  len(bin(n))
-    max_length = len(bin(n)) - 2  # limit for search --might need to be change to  root(n)+1?
-    substring = set()
-    for length in range(1, max_length + 1):
-        for i in range(len(binary_str) - length + 1):
-            substring.add(binary_str[i:i + length]) # [0,1] [1,2],[2,3] .....
+    substrings = set()
+    length = len(binary_str)
+
+    # Add all valid continuous substrings from start
+    for i in range(length):
+        sub = binary_str[:i + 1]  # Take from start to i
+        if sub[0] != '0' or sub == '0':  # Only add if no leading zero or is just '0'
+            substrings.add(sub)
+
+    # Add all valid continuous substrings from end
+    for i in range(length):
+        sub = binary_str[i:]  # Take from i to end
+        if sub[0] != '0' or sub == '0':  # Only add if no leading zero or is just '0'
+            substrings.add(sub)
 
     primes = set()
-    #main check
-    for s in substring:
+    for s in substrings:
         decimal = int(s, 2)
         if decimal < n and is_prime(decimal):
             primes.add(decimal)
 
-    return primes
+    return sorted(primes)
 
-#Format answer
-def format_output(primes):
+
+def format_output(binary_str, n):
+    """Format the output according to task requirements."""
+    if not all(c in '01' for c in binary_str):
+        return "0: Invalid binary string"
+    primes = find_primes(binary_str, n)
     if not primes:
-        return "0: Invalid binary string" #--> if string is valid but no prime numbers?
-
+        return "0: No prime numbers found"
     total = len(primes)
     if total < 6:
         return f"{total}: {', '.join(map(str, primes))}"
     else:
-        first_three = primes[:3]
-        last_three = primes[-3:]
-        return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
+        return f"{total}: {', '.join(map(str, primes[:3]))}, ..., {', '.join(map(str, primes[-3:]))}"
 
-
-# example
-binary_str = "101011"
-N = 99
-primes = find_primes(binary_str, N)
-print(format_output(primes))
-
-binary_str = "0110"
-N = 5
-primes = find_primes(binary_str, N)
-print(format_output(primes))
-
-binary_str = "COMP"
-N = 4
-primes = find_primes(binary_str, N)
-print(format_output(primes))
 
 # Example usage
-binary_str = "101011"
-n = 100
-print('Idea 1:')
-print(format_output2(binary_str, n))
+#binary_str = "0110"
+#n = 5
+#print(format_output(binary_str, n))  # Output: "2: 2, 3"
+
+
 
 
 "------------------------------------------------------------------------------------"
@@ -140,10 +139,10 @@ def format_output2(binary_str, n):
         return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
 
 # Example usage
-binary_str = "101011"
-n = 100
-print('Idea 2:')
-print(format_output2(binary_str, n))
+#binary_str = "101011"
+#n = 100
+#print('Idea 2:')
+#print(format_output2(binary_str, n))
 
 
 
@@ -206,14 +205,14 @@ def format_output3(binary_str, n):
     if total < 6:
         return f"{total}: {', '.join(map(str, answer))}"
     else:
-        first_three = answers[:3]
+        first_three = answer[:3]
         last_three = answer[-3:]
         return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
 
 
 # Example usage
-print('Idea 3:')
-print(format_output3(binary_str, n))
+#print('Idea 3:')
+#print(format_output3(binary_str, n))
 
 
 
