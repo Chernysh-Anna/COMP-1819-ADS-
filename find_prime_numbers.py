@@ -16,7 +16,7 @@ Idea:
 
 3.turn each combo to decimal and check if it prime and <n
 (need a set to store results)
-
+"""
 
 #Check if a number is prime
 #is 1 and 0 prime?
@@ -80,7 +80,13 @@ binary_str = "COMP"
 N = 4
 primes = find_primes(binary_str, N)
 print(format_output(primes))
-"""
+
+# Example usage
+binary_str = "101011"
+n = 100
+print('Idea 1:')
+print(format_output2(binary_str, n))
+
 
 "------------------------------------------------------------------------------------"
 
@@ -90,15 +96,10 @@ print(format_output(primes))
 Idea: 
 1.Search all primes number <= N
 2.Find them (if exist) in lst
-
+"""
 #check primes
-def is_prime(n):
-    if n < 2:
-        return False
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
+#def is_prime(n):
+
 
 #find all prime numbers <=n
 def generate_primes(n):
@@ -120,7 +121,7 @@ def find_matching_primes(binary_str, binary_primes):
     return answer
 
 
-def format_output(binary_str, n):
+def format_output2(binary_str, n):
     if not all(c in '01' for c in binary_str):
         return "0: Invalid binary string"
 
@@ -141,8 +142,10 @@ def format_output(binary_str, n):
 # Example usage
 binary_str = "101011"
 n = 100
-print(format_output(binary_str, n))
-"""
+print('Idea 2:')
+print(format_output2(binary_str, n))
+
+
 
 "--------------------------------------------"
 
@@ -169,13 +172,7 @@ Add to result set   |skip/next number     |
 """
 
 #check primes
-def is_prime(n):
-    if n < 2:
-        return False
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
+#def is_prime(n):
 
 #main
 def find_primes_dp(binary_str, n):
@@ -196,8 +193,8 @@ def find_primes_dp(binary_str, n):
                 primes.add(decimal_value)
 
     return primes
-
-def format_output(binary_str, n):
+#answer
+def format_output3(binary_str, n):
     if not all(c in '01' for c in binary_str):
         return "0: Invalid binary string"
 
@@ -215,9 +212,8 @@ def format_output(binary_str, n):
 
 
 # Example usage
-binary_str = "101011"
-n = 100
-print(format_output(binary_str, n))
+print('Idea 3:')
+print(format_output3(binary_str, n))
 
 
 
