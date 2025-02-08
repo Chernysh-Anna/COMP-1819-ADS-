@@ -23,11 +23,31 @@ info:
  It find all primes untill n and dont refer to input bn_string(i dont know why....)
  
 """
+"""
+info:
+test result: It seems to give the correct answers, but only passes tests 8 and 10 (the last 2 ->Timeout)
+
+~ is_prime(n) :
+    -Time Complexity:  O(sqr(n))
+    -Space Complexity: O (1)
+
+~ Total :
+    -Time Complexity:  O(m^2 * sqr(n)) (where m is the length of binary_str).
+    -Space Complexity: O (m^2)
+
+Better Approaches:
+1.Avoid repeated substrings
+2.Precompute primes using the Sieve of Eratosthenes for numbers up to N and use a lookup table.
+3.If a binary substring starts with 0, it can often be skipped.
+4.Use a sliding window technique to reduce redundant substring checks.
+5.Parallelization: Check primality in parallel for large datasets.
+
+
+"""
 
 #Check if a number is prime
 #is 1 and 0 prime?
 def is_prime(n):
-    """Check if a number is prime."""
     if n < 2:
         return False
     for i in range(2, int(n ** 0.5) + 1):
@@ -36,47 +56,49 @@ def is_prime(n):
     return True
 
 
+# Find all unique prime numbers from substrings of the binary string that are less than N
 def find_primes(binary_str, n):
-    """Find unique prime numbers from binary substrings that are less than N."""
+    # Check if binary_str is valid
     if not all(c in '01' for c in binary_str):
         return []
 
-    substrings = set()
-    length = len(binary_str)
+    # Find all substrings up to min(len(binary_str), len(bin(n)) - 2)
+    max_length = len(bin(n)) - 2
+    substring = set()
 
-    # Add all valid continuous substrings from start
-    for i in range(length):
-        sub = binary_str[:i + 1]  # Take from start to i
-        if sub[0] != '0' or sub == '0':  # Only add if no leading zero or is just '0'
-            substrings.add(sub)
-
-    # Add all valid continuous substrings from end
-    for i in range(length):
-        sub = binary_str[i:]  # Take from i to end
-        if sub[0] != '0' or sub == '0':  # Only add if no leading zero or is just '0'
-            substrings.add(sub)
+    for length in range(1, max_length + 1):
+        for i in range(len(binary_str) - length + 1):
+            substring.add(binary_str[i:i + length])  # Extract substrings
 
     primes = set()
-    for s in substrings:
+    for s in substring:
         decimal = int(s, 2)
-        if decimal < n and is_prime(decimal):
+        if  decimal < n and is_prime(decimal):  # Ignore 0 and 1
             primes.add(decimal)
 
     return sorted(primes)
 
 
+# Format answer
 def format_output(binary_str, n):
-    """Format the output according to task requirements."""
     if not all(c in '01' for c in binary_str):
         return "0: Invalid binary string"
+
     primes = find_primes(binary_str, n)
+
     if not primes:
         return "0: No prime numbers found"
+
     total = len(primes)
+
     if total < 6:
         return f"{total}: {', '.join(map(str, primes))}"
     else:
-        return f"{total}: {', '.join(map(str, primes[:3]))}, ..., {', '.join(map(str, primes[-3:]))}"
+        first_three = list(primes)[:3]
+        last_three = list(primes)[-3:]
+        return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
+
+
 
 
 # Example usage
@@ -95,6 +117,26 @@ def format_output(binary_str, n):
 Idea: 
 1.Search all primes number <= N
 2.Find them (if exist) in lst
+"""
+
+"""
+info:
+test result: It seems to give the correct answers, but only passes tests 4 out of 10 (->Timeout)
+
+
+~ Total
+    -Time Complexity:  O(n *sqrt(n)+ p+d)
+    -Very slow
+   
+
+Possible Improvements:
+1.Use a Hash Set for Faster Lookups
+2.Use a Sieve to Generate Primes Faster
+
+
+
+
+
 """
 #check primes
 #def is_prime(n):
@@ -170,6 +212,25 @@ Add to result set   |skip/next number     |
 
 """
 
+"""
+info:
+test result: It seems to give the correct answers, but only passes tests 8 out of 10 (the last 2 ->Timeout)
+
+
+~ Total
+    -Time Complexity:  O(m^2 +usqrt(N)) ( m -ength of binary_str, u - number of unique substrings).
+    ~Space : O(m^2 +u)  
+
+Possible Improvements:
+1.generate primes first (like in format_output2 approach) and check if their binary form exists in binary_str
+2.Use a Prime Sieve Instead of Checking Each Number
+
+
+
+
+
+"""
+
 #check primes
 #def is_prime(n):
 
@@ -197,7 +258,7 @@ def format_output3(binary_str, n):
     if not all(c in '01' for c in binary_str):
         return "0: Invalid binary string"
 
-    answer = find_primes_dp(binary_str, n)
+    answer = sorted(find_primes_dp(binary_str, n))  # Convert set to sorted list
     if not answer:
         return "0: No prime numbers found"
 
