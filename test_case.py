@@ -1,5 +1,5 @@
 """
-TODO: dont end after all 10 tests
+Title: test ideas
 """
 
 import time
@@ -126,7 +126,7 @@ def run_test_cases3():
         try:
             # Measure execution time
             start_time = time.time()
-            result = find_prime_numbers.format_output3(binary_str, n)  # Use format_output3
+            result = find_prime_numbers.format_output3(binary_str, n)  # Use format_output2
             end_time = time.time()
             elapsed_time = end_time - start_time
 
@@ -149,8 +149,41 @@ def run_test_cases3():
 
         print("-" * 60)
 
+def run_test_cases4():
+    for idx, (binary_str, n, expected) in enumerate(test_cases, start=1):
+        print(f"Test Case {idx}:")
+        print(f"🔹 Input: binary_str = '{binary_str}', n = {n}")
+
+        try:
+            # Measure execution time
+            start_time = time.time()
+            result = find_prime_numbers.format_output4(binary_str, n)  # Use format_output2
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+
+            # Check if the program took more than 60 seconds
+            #if elapsed_time > 60:
+                #print(f"❌ FAIL (Timeout: >60 seconds)")
+                #continue
+
+            # Compare the result with the expected output
+            if result == expected:
+                print(f"✅ PASS (Time: {elapsed_time:.6f} seconds)")
+            else:
+                print(f"❌ FAIL")
+                print(f"   🔹 Expected: {expected}")
+                print(f"   🔹 Got:      {result}")
+                print(f"   🔹 Time:     {elapsed_time:.6f} seconds")
+
+        except Exception as e:
+            print(f"❌ FAIL (Error: {str(e)})")
+
+        print("-" * 60)
+
+
 # Run the test cases
 if __name__ == "__main__":
     #run_test_cases()
     #run_test_cases2()
     run_test_cases3()
+     #run_test_cases4()

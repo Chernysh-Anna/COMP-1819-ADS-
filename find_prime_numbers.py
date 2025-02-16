@@ -20,7 +20,7 @@ Idea:
 """
 info:
  Doesn't work (only for short one)
- It find all primes untill n and dont refer to input bn_string(i dont know why....)
+ It find all primes until n and dont refer to input bn_string(i dont know why....)
  
 """
 """
@@ -235,7 +235,7 @@ Possible Improvements:
 #def is_prime(n):
 
 #main
-def find_primes_dp(binary_str, n):
+def find_primes_3(binary_str, n):
     if not all(c in '01' for c in binary_str):
         return "0: Invalid binary string"
 
@@ -253,12 +253,13 @@ def find_primes_dp(binary_str, n):
                 primes.add(decimal_value)
 
     return primes
+#remove compare block to independet one so we dont really need set anymore.(maybe + for time)..... add zero front check
 #answer
 def format_output3(binary_str, n):
     if not all(c in '01' for c in binary_str):
         return "0: Invalid binary string"
 
-    answer = sorted(find_primes_dp(binary_str, n))  # Convert set to sorted list
+    answer = sorted(find_primes_3(binary_str, n))  # Convert set to sorted list
     if not answer:
         return "0: No prime numbers found"
 
@@ -274,6 +275,53 @@ def format_output3(binary_str, n):
 # Example usage
 #print('Idea 3:')
 #print(format_output3(binary_str, n))
+
+"""
+Modify version
+separete check for <n and prime
+add ignore substrings that start with '0'
+only dictionary
+boost for time
+perhaps demage for memory
+pass: 8/10
+"""
+def find_primes_4(binary_str, n):
+    if not all(c in '01' for c in binary_str):
+        return "0: Invalid binary string"
+
+    substr_map = {}  # Stores unique substrings with their decimal values
+
+    # Generate substrings while avoiding leading zeros (except for "0")
+    for i in range(len(binary_str)):
+        if binary_str[i] == '0' and i != len(binary_str) - 1:  # Skip leading zeros
+            continue
+        for j in range(i + 1, len(binary_str) + 1):
+            sub = binary_str[i:j]
+            if sub not in substr_map:
+                substr_map[sub] = int(sub, 2)
+
+    # Extract prime numbers
+    prime_numbers = [value for value in substr_map.values() if value < n and is_prime(value)]
+
+    return prime_numbers  # Return list instead of set
+
+
+def format_output4(binary_str, n):
+    if not all(c in '01' for c in binary_str):
+        return "0: Invalid binary string"
+
+    answer = sorted(set(find_primes_4(binary_str, n)))  # Convert list to sorted unique values
+    if not answer:
+        return "0: No prime numbers found"
+
+    total = len(answer)
+    if total < 6:
+        return f"{total}: {', '.join(map(str, answer))}"
+    else:
+        first_three = answer[:3]
+        last_three = answer[-3:]
+        return f"{total}: {', '.join(map(str, first_three))}, {', '.join(map(str, last_three))}"
+
 
 
 
